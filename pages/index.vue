@@ -4,15 +4,15 @@ import {useConfetti} from "~/composables/useConfetti";
 const confetti = useConfetti()
 
 onMounted(() => {
-  confetti.startFirework()
+  // confetti.startFirework()
 })
 </script>
 
 <template>
-<div class="container">
-  <div>Hourglass</div>
-
-  <button class="btn btn-primary">Button</button>
+<div class="h-dvh content-center">
+  <div class="aspect-[16/9] mx-auto max-h-dvh bg-base-content/10">
+    12:00:00
+  </div>
 </div>
 </template>
 
