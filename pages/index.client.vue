@@ -36,11 +36,11 @@ function startCountDown() {
   timeInterval = setInterval(setTime)
 }
 
+// Set initial displayed time
+const initialTime = getCurrentTime()
+
 onMounted(() => {
   timeElement = document.getElementById('time')
-
-  // Set initial time text
-  setTime()
 
   // Wait until the next second to start
   setTimeout(startCountDown, getDiffToNextSecond())
@@ -54,7 +54,7 @@ onMounted(() => {
       Dzuhur: 00:45:24
     </div>
     <div id="time" class="font-mono font-bold text-[28vh]">
-      00:00:00
+      {{ initialTime }}
     </div>
   </div>
 </div>
