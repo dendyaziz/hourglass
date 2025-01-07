@@ -1,3 +1,6 @@
+<script setup lang="ts">
+</script>
+
 <template>
   <Html data-theme="light" />
 
@@ -7,5 +10,3 @@
 
   <Toast />
 </template>
-<script setup lang="ts">
-</script>
