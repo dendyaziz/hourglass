@@ -1,21 +1,21 @@
 <script setup lang="ts">
 import { useConfetti } from '~/composables/useConfetti'
-import { getDiffToNextSecond, getTime } from '~/helper'
+import { getDiffToNextSecond, getTimeString } from '~/helper'
 
 const confetti = useConfetti()
 let timeElement: Element | null = null
 let timeInterval: NodeJS.Timeout | null = null
 let eventObserverInterval: NodeJS.Timeout | null = null
 
-function getCurrentTime() {
-  return getTime(new Date())
+function getCurrentTimeString() {
+  return getTimeString(new Date())
 }
 
 function displayTime() {
   if (!timeElement)
     return
 
-  timeElement.innerHTML = getCurrentTime()
+  timeElement.innerHTML = getCurrentTimeString()
 }
 
 function checkEvent() {
@@ -38,7 +38,7 @@ function startEventChecker() {
 }
 
 // Set initial displayed time
-const initialTime = getCurrentTime()
+const initialTimeString = getCurrentTimeString()
 
 onMounted(() => {
   timeElement = document.getElementById('time')
@@ -63,7 +63,7 @@ onMounted(() => {
         id="time"
         class="font-mono font-bold text-[28vh]"
       >
-        {{ initialTime }}
+        {{ initialTimeString }}
       </div>
     </div>
   </div>
