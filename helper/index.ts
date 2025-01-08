@@ -1,5 +1,7 @@
 export function getNow(): Date {
   const now = new Date()
+  // now.setHours(now.getHours() + 3)
+  // now.setMinutes(now.getMinutes() + 3)
   return now
 }
 
