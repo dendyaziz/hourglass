@@ -50,10 +50,17 @@ function getNextPrayerTime(date: Date): { prayer: string, time: Date } | null {
     for (const [prayer, time] of Object.entries(timesToday)) {
       if (prayer !== 'tanggal') {
         const [hour, minute] = time.split(':').map(Number)
+
         const prayerTime = new Date(date)
         prayerTime.setHours(hour, minute, 0, 0)
 
-        if (prayerTime > date) {
+        const adzanSecondsDelay = prayerDelays[prayer]?.adzan || 0
+        const iqomahSecondsDelay = prayerDelays[prayer]?.iqomah || 0
+
+        const actualPrayerTime = new Date(prayerTime.getTime())
+        actualPrayerTime.setSeconds(actualPrayerTime.getSeconds() + adzanSecondsDelay + iqomahSecondsDelay)
+
+        if (actualPrayerTime > date) {
           nextPrayerList.push({ prayer, time: prayerTime })
         }
       }
@@ -100,8 +107,8 @@ function scheduleEvent(date: Date, prayer: string, adzanDelay: number | null, iq
         scheduleEvent(adzanEnd, prayer, null, iqomahDelay)
       }, adzanEnd.getTime() - now.getTime())
     }
-    else if (iqomahDelay !== null && now < new Date(date.getTime() + iqomahDelay * 1000)) {
-      const iqomahEnd = new Date(date.getTime() + iqomahDelay * 1000)
+    else if (adzanDelay !== null && iqomahDelay !== null && now < new Date(date.getTime() + (adzanDelay * 1000) + (iqomahDelay * 1000))) {
+      const iqomahEnd = new Date(date.getTime() + (adzanDelay * 1000) + (iqomahDelay * 1000))
       nextEventDate = iqomahEnd
       nameElement.innerHTML = `Iqomah ${prayer}: `
       countDownElement.innerHTML = getTimeDiffString(iqomahEnd)
