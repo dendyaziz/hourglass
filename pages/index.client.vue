@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import debounce from 'lodash.debounce'
 import { useConfetti } from '~/composables/useConfetti'
-import { getDiffToNextSecond, getTimeString } from '~/helper'
+import { getDiffToNextSecond, getNow, getTimeString } from '~/helper'
 
 const confetti = useConfetti()
 
@@ -13,7 +13,7 @@ let timeInterval: NodeJS.Timeout | null = null
 let eventObserverInterval: NodeJS.Timeout | null = null
 
 function getCurrentTimeString() {
-  return getTimeString(new Date())
+  return getTimeString(getNow())
 }
 
 function displayTime() {
@@ -87,13 +87,13 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="h-dvh content-center">
+  <div class="h-dvh content-center bg-base-content/5">
     <div
       id="clock-container"
-      class="relative aspect-[16/9] mx-auto max-h-dvh flex flex-col justify-center items-center bg-base-content/10 text-[132px]"
+      class="relative aspect-[16/9] mx-auto max-h-dvh flex flex-col justify-center items-center bg-base-100 text-[132px]"
       :style="{ fontSize: `${fontSize}px` }"
     >
-      <div class="font-mono font-semibold text-[0.5em] truncate max-w-full">
+      <div class="absolute left-1/2 top-[15%] -translate-x-1/2 -translate-y-1/2 font-mono font-semibold text-[0.3em] truncate max-w-full">
         <PrayerCountDown />
       </div>
       <div

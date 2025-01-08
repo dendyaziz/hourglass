@@ -1,5 +1,12 @@
-export function getDiffToNextSecond(): number {
+export function getNow(): Date {
   const now = new Date()
+  now.setHours(now.getHours() + 4)
+  now.setMinutes(now.getMinutes() + 20)
+  return now
+}
+
+export function getDiffToNextSecond(): number {
+  const now = getNow()
   const milliseconds = now.getMilliseconds()
   return 1000 - milliseconds
 }
@@ -11,9 +18,11 @@ export function getTimeString(date: Date): string {
   return `${formatWithLeadingZeros(date.getHours())}:${formatWithLeadingZeros(date.getMinutes())}:${formatWithLeadingZeros(date.getSeconds())}`
 }
 
-export function getTimeDiffString(startDate: Date, endDate: Date): string {
+export function getTimeDiffString(date: Date): string {
+  const now = getNow()
+
   // Get the time difference in milliseconds
-  const diffMs = endDate.getTime() - startDate.getTime()
+  const diffMs = date.getTime() - now.getTime()
 
   // Convert milliseconds to seconds
   const diffSeconds = Math.floor(diffMs / 1000)

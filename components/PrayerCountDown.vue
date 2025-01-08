@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getDiffToNextSecond, getTimeDiffString } from '~/helper'
+import { getDiffToNextSecond, getNow, getTimeDiffString } from '~/helper'
 import prayerTimes from '~/assets/json/prayer-time.json'
 
 interface PrayerTimes {
@@ -16,10 +16,30 @@ interface PrayerTimes {
   }
 }
 
+interface PrayerDelays {
+  [key: string]: {
+    adzan: number | null
+    iqomah: number | null
+  }
+}
+
+const prayerDelays: PrayerDelays = {
+  imsak: { adzan: null, iqomah: null },
+  subuh: { adzan: 180, iqomah: 600 },
+  terbit: { adzan: null, iqomah: null },
+  dhuha: { adzan: null, iqomah: null },
+  dzuhur: { adzan: 180, iqomah: 420 },
+  ashar: { adzan: 180, iqomah: 420 },
+  maghrib: { adzan: 180, iqomah: 600 },
+  isya: { adzan: 180, iqomah: 600 },
+}
+
+const prayerTimesData: PrayerTimes = prayerTimes
 let nameElement: Element | null = null
 let countDownElement: Element | null = null
 let countDownInterval: NodeJS.Timeout | null = null
-const prayerTimesData: PrayerTimes = prayerTimes
+let nextEventTimeout: NodeJS.Timeout | null = null
+let nextEventDate: Date | null = null
 
 function getNextPrayerTime(date: Date): { prayer: string, time: Date } | null {
   const todayDate = date.toISOString().split('T')[0]
@@ -44,7 +64,6 @@ function getNextPrayerTime(date: Date): { prayer: string, time: Date } | null {
     return nextPrayerList.sort((a, b) => a.time.getTime() - b.time.getTime())[0]
   }
 
-  // If no prayers remain for today, check the next day
   const tomorrowDate = new Date(date)
   tomorrowDate.setDate(date.getDate() + 1)
   const nextDayDate = tomorrowDate.toISOString().split('T')[0]
@@ -64,19 +83,59 @@ function getNextPrayerTime(date: Date): { prayer: string, time: Date } | null {
   return null
 }
 
-function checkPrayerTime() {
+function scheduleEvent(date: Date, prayer: string, adzanDelay: number | null, iqomahDelay: number | null) {
   if (!nameElement || !countDownElement)
     return
 
-  const currentTime = new Date()
+  const now = getNow()
 
-  const nextPrayerTime = getNextPrayerTime(currentTime)
+  if (date <= now) {
+    if (adzanDelay !== null && now < new Date(date.getTime() + adzanDelay * 1000)) {
+      const adzanEnd = new Date(date.getTime() + adzanDelay * 1000)
+      nextEventDate = adzanEnd
+      nameElement.innerHTML = `Adzan ${prayer}: `
+      countDownElement.innerHTML = getTimeDiffString(adzanEnd)
 
-  if (!nextPrayerTime)
+      nextEventTimeout = setTimeout(() => {
+        scheduleEvent(adzanEnd, prayer, null, iqomahDelay)
+      }, adzanEnd.getTime() - now.getTime())
+    }
+    else if (iqomahDelay !== null && now < new Date(date.getTime() + iqomahDelay * 1000)) {
+      const iqomahEnd = new Date(date.getTime() + iqomahDelay * 1000)
+      nextEventDate = iqomahEnd
+      nameElement.innerHTML = `Iqomah ${prayer}: `
+      countDownElement.innerHTML = getTimeDiffString(iqomahEnd)
+
+      nextEventTimeout = setTimeout(() => {
+        const nextPrayerTime = getNextPrayerTime(iqomahEnd)
+        if (nextPrayerTime) {
+          scheduleEvent(nextPrayerTime.time, nextPrayerTime.prayer, prayerDelays[nextPrayerTime.prayer]?.adzan ?? null, prayerDelays[nextPrayerTime.prayer]?.iqomah ?? null)
+        }
+      }, iqomahEnd.getTime() - now.getTime())
+    }
+    else {
+      const nextPrayerTime = getNextPrayerTime(now)
+      if (nextPrayerTime) {
+        scheduleEvent(nextPrayerTime.time, nextPrayerTime.prayer, prayerDelays[nextPrayerTime.prayer]?.adzan ?? null, prayerDelays[nextPrayerTime.prayer]?.iqomah ?? null)
+      }
+    }
+  }
+  else {
+    nameElement.innerHTML = `${prayer}: `
+    nextEventDate = date
+    countDownElement.innerHTML = getTimeDiffString(date)
+
+    nextEventTimeout = setTimeout(() => {
+      scheduleEvent(date, prayer, adzanDelay, iqomahDelay)
+    }, date.getTime() - now.getTime())
+  }
+}
+
+function displayCountDown() {
+  if (!countDownElement || !nextEventDate)
     return
 
-  nameElement.innerHTML = `${nextPrayerTime.prayer}: `
-  countDownElement.innerHTML = getTimeDiffString(currentTime, nextPrayerTime.time)
+  countDownElement.innerHTML = getTimeDiffString(nextEventDate)
 }
 
 function startCountDown() {
@@ -84,17 +143,32 @@ function startCountDown() {
   if (countDownInterval)
     clearInterval(countDownInterval)
 
-  countDownInterval = setInterval(checkPrayerTime, 1000)
+  countDownInterval = setInterval(displayCountDown, 1000)
 }
 
 onMounted(() => {
   nameElement = document.getElementById('prayer-name')
   countDownElement = document.getElementById('prayer-count-down')
 
+  const now = getNow()
+  const nextPrayerTime = getNextPrayerTime(now)
+
+  if (nextPrayerTime) {
+    scheduleEvent(nextPrayerTime.time, nextPrayerTime.prayer, prayerDelays[nextPrayerTime.prayer]?.adzan ?? null, prayerDelays[nextPrayerTime.prayer]?.iqomah ?? null)
+  }
+
   const diffToNextSecond = getDiffToNextSecond()
 
   // Wait until the next second to start
   setTimeout(startCountDown, diffToNextSecond)
+})
+
+// Inside your script
+onUnmounted(() => {
+  if (nextEventTimeout) {
+    clearTimeout(nextEventTimeout)
+    nextEventTimeout = null
+  }
 })
 </script>
 
@@ -102,9 +176,8 @@ onMounted(() => {
   <span><span
     id="prayer-name"
     class="capitalize"
-  >Good Morning!</span><span id="prayer-count-down" /></span>
+  >Loading...</span><span id="prayer-count-down" /></span>
 </template>
 
 <style scoped>
-
 </style>
