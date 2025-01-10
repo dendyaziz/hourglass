@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { getDiffToNextSecond, getNow, getTimeDiffString } from '~/helper'
 import prayerTimes from '~/assets/json/prayer-time.json'
+import { useClockStore } from '~/store/clock'
+
+const clockStore = useClockStore()
 
 interface PrayerTimes {
   [date: string]: {
@@ -150,7 +153,7 @@ function startCountDown() {
   if (countDownInterval)
     clearInterval(countDownInterval)
 
-  countDownInterval = setInterval(displayCountDown, 1000)
+  countDownInterval = setInterval(displayCountDown, clockStore.clockInterval)
 }
 
 onMounted(() => {

@@ -1,8 +1,14 @@
+import { useClockStore } from '~/store/clock'
+
 export function getNow(): Date {
+  const clockStore = useClockStore()
+
   const now = new Date()
   // now.setHours(now.getHours() + 18)
   // now.setMinutes(now.getMinutes() + 1)
   // now.setSeconds(now.getSeconds() + 25)
+
+  now.setSeconds(now.getSeconds() + clockStore.adjustedSeconds)
   return now
 }
 

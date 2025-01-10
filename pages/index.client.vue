@@ -2,8 +2,10 @@
 import debounce from 'lodash.debounce'
 import { useConfetti } from '~/composables/useConfetti'
 import { getDiffToNextSecond, getNow, getTimeString } from '~/helper'
+import { useClockStore } from '~/store/clock'
 
 const confetti = useConfetti()
+const clockStore = useClockStore()
 
 const fontSize: number = 100
 
@@ -27,7 +29,7 @@ function startClock() {
   if (timeInterval)
     clearInterval(timeInterval)
 
-  timeInterval = setInterval(displayTime, 1000)
+  timeInterval = setInterval(displayTime, clockStore.clockInterval)
 }
 
 // Set initial displayed time
@@ -61,6 +63,8 @@ onMounted(() => {
     resizeObserver = new ResizeObserver(debouncedSyncFontSize)
     resizeObserver.observe(containerElement)
   }
+
+  clockStore.fastenClock()
 })
 
 onBeforeUnmount(() => {
