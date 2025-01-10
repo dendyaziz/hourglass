@@ -10,7 +10,6 @@ const fontSize: number = 100
 let containerElement: HTMLElement | null = null
 let timeElement: HTMLElement | null = null
 let timeInterval: NodeJS.Timeout | null = null
-let eventObserverInterval: NodeJS.Timeout | null = null
 
 function getCurrentTimeString() {
   return getTimeString(getNow())
@@ -23,23 +22,12 @@ function displayTime() {
   timeElement.innerHTML = getCurrentTimeString()
 }
 
-function checkEvent() {
-}
-
 function startClock() {
   // Clear time interval if any
   if (timeInterval)
     clearInterval(timeInterval)
 
   timeInterval = setInterval(displayTime, 1000)
-}
-
-function startEventChecker() {
-  // Clear event listener interval if any
-  if (eventObserverInterval)
-    clearInterval(eventObserverInterval)
-
-  eventObserverInterval = setInterval(checkEvent, 1000)
 }
 
 // Set initial displayed time
@@ -66,9 +54,6 @@ onMounted(() => {
 
   // Wait until the next second to start
   setTimeout(startClock, diffToNextSecond)
-
-  // Wait until the next second to start
-  setTimeout(startEventChecker, diffToNextSecond)
 
   containerElement = document.getElementById('clock-container')
 
