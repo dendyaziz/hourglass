@@ -18,6 +18,7 @@ export const useClockStore = defineStore('useClockStore', {
     stopFastenClock() {
       const clockStore = useClockStore()
       clockStore.clockInterval = 1000
+      clockStore.adjustedSeconds = 0
 
       if (clockStore.fastenClockInterval)
         clearInterval(clockStore.fastenClockInterval)

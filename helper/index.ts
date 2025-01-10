@@ -4,9 +4,9 @@ export function getNow(): Date {
   const clockStore = useClockStore()
 
   const now = new Date()
-  now.setHours(now.getHours() - 3)
-  now.setMinutes(now.getMinutes() + 51)
-  now.setSeconds(now.getSeconds() + 50)
+  // now.setHours(now.getHours() - 3)
+  // now.setMinutes(now.getMinutes() + 51)
+  // now.setSeconds(now.getSeconds() + 50)
 
   now.setSeconds(now.getSeconds() + clockStore.adjustedSeconds)
   return now
