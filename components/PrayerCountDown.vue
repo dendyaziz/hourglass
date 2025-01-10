@@ -182,7 +182,7 @@ onUnmounted(() => {
 <template>
   <span><span
     id="prayer-name"
-    class="capitalize"
+    class="capitalize opacity-50"
   >Loading...</span><span id="prayer-count-down" /></span>
 </template>
 

@@ -87,18 +87,18 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="h-dvh content-center bg-base-content/5">
+  <div class="h-dvh content-center bg-base-100">
     <div
       id="clock-container"
-      class="relative aspect-[16/9] mx-auto max-h-dvh flex flex-col justify-center items-center bg-base-100 text-[132px]"
+      class="relative aspect-[16/9] mx-auto max-h-dvh flex flex-col justify-center items-center text-[132px]"
       :style="{ fontSize: `${fontSize}px` }"
     >
-      <div class="absolute left-1/2 top-[15%] -translate-x-1/2 -translate-y-1/2 font-mono font-semibold text-[0.3em] truncate max-w-full">
+      <div class="absolute left-1/2 top-[17%] -translate-x-1/2 -translate-y-1/2 font-mono font-semibold text-[0.4em] truncate max-w-full">
         <PrayerCountDown />
       </div>
       <div
         id="time"
-        class="font-mono font-bold text-[1em] truncate max-w-full"
+        class="font-mono font-bold text-[1em] truncate max-w-full text-white"
       >
         {{ initialTimeString }}
       </div>

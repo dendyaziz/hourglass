@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <Html data-theme="light" />
+  <Html data-theme="dark" />
 
   <NuxtLayout>
     <NuxtPage />
