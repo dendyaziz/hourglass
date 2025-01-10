@@ -4,9 +4,9 @@ export function getNow(): Date {
   const clockStore = useClockStore()
 
   const now = new Date()
-  // now.setHours(now.getHours() + 18)
-  // now.setMinutes(now.getMinutes() + 1)
-  // now.setSeconds(now.getSeconds() + 25)
+  now.setHours(now.getHours() - 3)
+  now.setMinutes(now.getMinutes() + 51)
+  now.setSeconds(now.getSeconds() + 50)
 
   now.setSeconds(now.getSeconds() + clockStore.adjustedSeconds)
   return now
@@ -29,10 +29,13 @@ export function getTimeDiffString(date: Date): string {
   const now = getNow()
 
   // Get the time difference in milliseconds
-  const diffMs = date.getTime() - now.getTime()
+  let diffMs = date.getTime() - now.getTime()
+
+  if (diffMs < 0)
+    diffMs = 0
 
   // Convert milliseconds to seconds
-  const diffSeconds = Math.floor(diffMs / 1000)
+  const diffSeconds = Math.floor(diffMs / 1000) + 1
 
   // Calculate hours, minutes, and seconds
   const hours = Math.floor(diffSeconds / 3600)

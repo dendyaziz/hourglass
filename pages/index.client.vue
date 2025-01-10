@@ -49,6 +49,8 @@ function syncFontSize() {
 let resizeObserver: ResizeObserver
 const debouncedSyncFontSize = debounce(syncFontSize, 5)
 
+// clockStore.fastenClock()
+
 onMounted(() => {
   timeElement = document.getElementById('time')
 
@@ -63,8 +65,6 @@ onMounted(() => {
     resizeObserver = new ResizeObserver(debouncedSyncFontSize)
     resizeObserver.observe(containerElement)
   }
-
-  clockStore.fastenClock()
 })
 
 onBeforeUnmount(() => {

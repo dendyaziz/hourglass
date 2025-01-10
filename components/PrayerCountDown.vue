@@ -100,17 +100,18 @@ function scheduleEvent(date: Date, prayer: string, adzanDelay: number | null, iq
   const now = getNow()
 
   if (date <= now) {
-    if (adzanDelay !== null && now < new Date(date.getTime() + adzanDelay * 1000)) {
+    // Adzan
+    if (adzanDelay !== null && iqomahDelay !== null && now <= new Date(date.getTime() + adzanDelay * 1000)) {
       const adzanEnd = new Date(date.getTime() + adzanDelay * 1000)
       nextEventDate = adzanEnd
       nameElement.innerHTML = `Adzan ${prayer}: `
       countDownElement.innerHTML = getTimeDiffString(adzanEnd)
 
       nextEventTimeout = setTimeout(() => {
-        scheduleEvent(adzanEnd, prayer, null, iqomahDelay)
-      }, adzanEnd.getTime() - now.getTime())
-    }
-    else if (adzanDelay !== null && iqomahDelay !== null && now < new Date(date.getTime() + (adzanDelay * 1000) + (iqomahDelay * 1000))) {
+        scheduleEvent(date, prayer, adzanDelay, iqomahDelay)
+      }, (adzanEnd.getTime() - now.getTime()) / (1000 / clockStore.clockInterval))
+    }// Iqomah
+    else if (adzanDelay !== null && iqomahDelay !== null && now <= new Date(date.getTime() + (adzanDelay * 1000) + (iqomahDelay * 1000))) {
       const iqomahEnd = new Date(date.getTime() + (adzanDelay * 1000) + (iqomahDelay * 1000))
       nextEventDate = iqomahEnd
       nameElement.innerHTML = `Iqomah ${prayer}: `
@@ -121,8 +122,9 @@ function scheduleEvent(date: Date, prayer: string, adzanDelay: number | null, iq
         if (nextPrayerTime) {
           scheduleEvent(nextPrayerTime.time, nextPrayerTime.prayer, prayerDelays[nextPrayerTime.prayer]?.adzan ?? null, prayerDelays[nextPrayerTime.prayer]?.iqomah ?? null)
         }
-      }, iqomahEnd.getTime() - now.getTime())
+      }, (iqomahEnd.getTime() - now.getTime()) / (1000 / clockStore.clockInterval))
     }
+    // Prayer Time
     else {
       const nextPrayerTime = getNextPrayerTime(now)
       if (nextPrayerTime) {
@@ -130,6 +132,7 @@ function scheduleEvent(date: Date, prayer: string, adzanDelay: number | null, iq
       }
     }
   }
+  // Prayer Time
   else {
     nameElement.innerHTML = `${prayer}: `
     nextEventDate = date
@@ -137,7 +140,7 @@ function scheduleEvent(date: Date, prayer: string, adzanDelay: number | null, iq
 
     nextEventTimeout = setTimeout(() => {
       scheduleEvent(date, prayer, adzanDelay, iqomahDelay)
-    }, date.getTime() - now.getTime())
+    }, (date.getTime() - now.getTime()) / (1000 / clockStore.clockInterval))
   }
 }
 

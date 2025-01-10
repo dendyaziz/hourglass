@@ -9,11 +9,11 @@ export const useClockStore = defineStore('useClockStore', {
   actions: {
     fastenClock() {
       const clockStore = useClockStore()
-      clockStore.clockInterval = 1
+      clockStore.clockInterval = 10
 
       clockStore.fastenClockInterval = setInterval(() => {
-        clockStore.adjustedSeconds += 10
-      }, 10)
+        clockStore.adjustedSeconds += 1
+      }, clockStore.clockInterval)
     },
     stopFastenClock() {
       const clockStore = useClockStore()
