@@ -19,12 +19,12 @@ export default defineNuxtConfig({
       background_color: '#1D232A',
       icons: [
         {
-          src: '/hourglass-logo-192x192',
+          src: '/hourglass-logo-192x192.png',
           sizes: '192x192',
           type: 'image/png',
         },
         {
-          src: '/hourglass-logo-512x512',
+          src: '/hourglass-logo-512x512.png',
           sizes: '512x512',
           type: 'image/png',
         },
