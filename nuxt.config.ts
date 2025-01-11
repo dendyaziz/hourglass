@@ -30,6 +30,9 @@ export default defineNuxtConfig({
         },
       ],
     },
+    workbox: {
+      navigateFallback: '/',
+    },
     devOptions: {
       enabled: true, // Enables PWA during development for testing
     },
