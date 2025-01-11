@@ -7,6 +7,7 @@ import { useClockStore } from '~/store/clock'
 const confetti = useConfetti()
 const clockStore = useClockStore()
 
+const appVersion = __APP_VERSION__
 const fontSize: number = 100
 
 let containerElement: HTMLElement | null = null
@@ -85,11 +86,16 @@ onBeforeUnmount(() => {
       <div class="absolute left-1/2 top-[17%] -translate-x-1/2 -translate-y-1/2 font-mono font-semibold text-[0.4em] truncate max-w-full">
         <PrayerCountDown />
       </div>
+
       <div
         id="time"
         class="font-mono font-bold text-[1em] truncate max-w-full text-white"
       >
         {{ initialTimeString }}
+      </div>
+
+      <div class="absolute left-1/2 bottom-[10%] -translate-x-1/2 font-mono font-semibold text-[0.2em] truncate max-w-full opacity-25">
+        v{{ appVersion }}
       </div>
     </div>
   </div>

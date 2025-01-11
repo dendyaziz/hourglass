@@ -1,3 +1,5 @@
+import { version } from './package.json'
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
@@ -9,6 +11,12 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt',
   ],
 
+  vite: {
+    define: {
+      __APP_VERSION__: JSON.stringify(version),
+    },
+  },
+
   pwa: {
     registerType: 'autoUpdate', // Automatically updates the service worker
     manifest: {
@@ -18,6 +26,8 @@ export default defineNuxtConfig({
       description: 'Clock and countdown app',
       theme_color: '#1D232A',
       background_color: '#1D232A',
+      display: 'standalone',
+      orientation: 'landscape',
       icons: [
         {
           src: '/hourglass-logo-192x192.png',
