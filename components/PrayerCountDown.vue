@@ -38,6 +38,7 @@ const prayerDelays: PrayerDelays = {
 }
 
 const prayerTimesData: PrayerTimes = prayerTimes
+
 let nameElement: Element | null = null
 let countDownElement: Element | null = null
 let countDownInterval: NodeJS.Timeout | null = null
@@ -163,17 +164,19 @@ onMounted(() => {
   nameElement = document.getElementById('prayer-name')
   countDownElement = document.getElementById('prayer-count-down')
 
-  const now = getNow()
-  const nextPrayerTime = getNextPrayerTime(now)
-
-  if (nextPrayerTime) {
-    scheduleEvent(nextPrayerTime.time, nextPrayerTime.prayer, prayerDelays[nextPrayerTime.prayer]?.adzan ?? null, prayerDelays[nextPrayerTime.prayer]?.iqomah ?? null)
-  }
-
   const diffToNextSecond = getDiffToNextSecond()
 
   // Wait until the next second to start
   setTimeout(startCountDown, diffToNextSecond)
+
+  setTimeout(() => {
+    const now = getNow()
+    const nextPrayerTime = getNextPrayerTime(now)
+
+    if (nextPrayerTime) {
+      scheduleEvent(nextPrayerTime.time, nextPrayerTime.prayer, prayerDelays[nextPrayerTime.prayer]?.adzan ?? null, prayerDelays[nextPrayerTime.prayer]?.iqomah ?? null)
+    }
+  }, diffToNextSecond + 1000)
 })
 
 // Inside your script
@@ -189,7 +192,7 @@ onUnmounted(() => {
   <span><span
     id="prayer-name"
     class="capitalize opacity-50"
-  >Loading...</span><span id="prayer-count-down" /></span>
+  >Halo, Dendy!</span><span id="prayer-count-down" /></span>
 </template>
 
 <style scoped>

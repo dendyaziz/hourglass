@@ -33,9 +33,6 @@ function startClock() {
   timeInterval = setInterval(displayTime, clockStore.clockInterval)
 }
 
-// Set initial displayed time
-const initialTimeString = getCurrentTimeString()
-
 function syncFontSize() {
   if (!containerElement)
     return
@@ -45,6 +42,10 @@ function syncFontSize() {
   const { height } = containerRect
 
   containerElement.style.fontSize = `${height / 3.25}px`
+}
+
+function reload() {
+  reloadNuxtApp()
 }
 
 let resizeObserver: ResizeObserver
@@ -77,7 +78,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="h-dvh content-center bg-base-100">
+  <div class="h-dvh content-center bg-black">
     <div
       id="clock-container"
       class="relative aspect-[16/9] mx-auto max-h-dvh flex flex-col justify-center items-center text-[132px]"
@@ -89,12 +90,15 @@ onBeforeUnmount(() => {
 
       <div
         id="time"
-        class="font-mono font-bold text-[1em] truncate max-w-full text-white"
+        class="font-mono font-bold text-[1em] truncate max-w-full text-white flex items-center"
       >
-        {{ initialTimeString }}
+        <span class="text-[0.7em]">Selamat Pagi</span>
       </div>
 
-      <div class="absolute left-1/2 bottom-[10%] -translate-x-1/2 font-mono font-semibold text-[0.2em] truncate max-w-full opacity-25">
+      <div
+        class="absolute left-[5%] bottom-[10%] font-mono font-semibold text-[0.2em] truncate max-w-full opacity-25 h-[10%] flex items-center"
+        @click="reload"
+      >
         v{{ appVersion }}
       </div>
     </div>
