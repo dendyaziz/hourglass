@@ -101,6 +101,12 @@ onBeforeUnmount(() => {
       >
         v{{ appVersion }}
       </div>
+
+      <div
+        class="absolute right-[5%] bottom-[10%] font-mono font-semibold text-[0.15em] truncate max-w-full opacity-75 h-[10%] flex items-center"
+      >
+        <BatteryInfo />
+      </div>
     </div>
   </div>
 </template>
