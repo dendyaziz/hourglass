@@ -24,8 +24,8 @@ export default defineNuxtConfig({
       name: 'Hourglass',
       short_name: 'Hourglass',
       description: 'Clock and countdown app',
-      theme_color: '#1D232A',
-      background_color: '#1D232A',
+      theme_color: '#000000',
+      background_color: '#000000',
       display: 'standalone',
       orientation: 'landscape',
       icons: [
