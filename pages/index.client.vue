@@ -84,7 +84,7 @@ onBeforeUnmount(() => {
       class="relative aspect-[16/9] mx-auto max-h-dvh flex flex-col justify-center items-center text-[132px]"
       :style="{ fontSize: `${fontSize}px` }"
     >
-      <div class="absolute left-1/2 top-[17%] -translate-x-1/2 -translate-y-1/2 font-mono font-semibold text-[0.4em] truncate max-w-full">
+      <div class="absolute left-1/2 top-[17%] -translate-x-1/2 -translate-y-1/2 font-mono font-semibold text-[0.35em] truncate max-w-full">
         <PrayerCountDown />
       </div>
 
