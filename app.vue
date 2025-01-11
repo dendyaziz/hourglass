@@ -3,6 +3,7 @@
 
 <template>
   <Html data-theme="dark" />
+  <NuxtPwaManifest />
 
   <NuxtLayout>
     <NuxtPage />
