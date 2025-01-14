@@ -23,18 +23,19 @@ interface PrayerDelays {
   [key: string]: {
     adzan: number | null
     iqomah: number | null
+    skip?: boolean | null
   }
 }
 
 const prayerDelays: PrayerDelays = {
-  imsak: { adzan: null, iqomah: null },
-  subuh: { adzan: 180, iqomah: 600 },
+  imsak: { adzan: null, iqomah: null, skip: true },
+  subuh: { adzan: 5 * 60, iqomah: 9 * 60 },
   terbit: { adzan: null, iqomah: null },
   dhuha: { adzan: null, iqomah: null },
-  dzuhur: { adzan: 180, iqomah: 420 },
-  ashar: { adzan: 180, iqomah: 420 },
-  maghrib: { adzan: 180, iqomah: 600 },
-  isya: { adzan: 180, iqomah: 600 },
+  dzuhur: { adzan: 3 * 60, iqomah: 9 * 60 },
+  ashar: { adzan: 3 * 60, iqomah: 8 * 60 },
+  maghrib: { adzan: 5 * 60, iqomah: 8 * 60 },
+  isya: { adzan: 6 * 60, iqomah: 8 * 60 },
 }
 
 const prayerTimesData: PrayerTimes = prayerTimes
@@ -53,13 +54,18 @@ function getNextPrayerTime(date: Date): { prayer: string, time: Date } | null {
   if (timesToday) {
     for (const [prayer, time] of Object.entries(timesToday)) {
       if (prayer !== 'tanggal') {
+        const shouldSkip = prayerDelays[prayer]?.skip || false
+
+        if (shouldSkip)
+          continue
+
+        const adzanSecondsDelay = prayerDelays[prayer]?.adzan || 0
+        const iqomahSecondsDelay = prayerDelays[prayer]?.iqomah || 0
+
         const [hour, minute] = time.split(':').map(Number)
 
         const prayerTime = new Date(date)
         prayerTime.setHours(hour, minute, 0, 0)
-
-        const adzanSecondsDelay = prayerDelays[prayer]?.adzan || 0
-        const iqomahSecondsDelay = prayerDelays[prayer]?.iqomah || 0
 
         const actualPrayerTime = new Date(prayerTime.getTime())
         actualPrayerTime.setSeconds(actualPrayerTime.getSeconds() + adzanSecondsDelay + iqomahSecondsDelay)
