@@ -87,7 +87,7 @@ function getNextPrayerTime(date: Date): { prayer: string, time: Date } | null {
   const timesTomorrow = prayerTimesData[nextDayDate]
 
   if (timesTomorrow) {
-    const [firstPrayer, firstTime] = Object.entries(timesTomorrow).find(([key]) => key !== 'tanggal') || []
+    const [firstPrayer, firstTime] = Object.entries(timesTomorrow).find(([key]) => key !== 'tanggal' && !prayerDelays[key].skip) || []
     if (firstPrayer && firstTime) {
       const [hour, minute] = firstTime.split(':').map(Number)
       const prayerTime = new Date(tomorrowDate)
