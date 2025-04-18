@@ -29,13 +29,13 @@ interface PrayerDelays {
 
 const prayerDelays: PrayerDelays = {
   imsak: { adzan: null, iqomah: null, skip: true },
-  subuh: { adzan: 5 * 60, iqomah: 9 * 60 },
+  subuh: { adzan: 4 * 60, iqomah: 9 * 60 },
   terbit: { adzan: null, iqomah: null },
   dhuha: { adzan: null, iqomah: null },
   dzuhur: { adzan: 3 * 60, iqomah: 9 * 60 },
   ashar: { adzan: 3 * 60, iqomah: 8 * 60 },
-  maghrib: { adzan: 5 * 60, iqomah: 8 * 60 },
-  isya: { adzan: 6 * 60, iqomah: 8 * 60 },
+  maghrib: { adzan: 3.5 * 60, iqomah: 8 * 60 },
+  isya: { adzan: 3.5 * 60, iqomah: 8 * 60 },
 }
 
 const prayerTimesData: PrayerTimes = prayerTimes
